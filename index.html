@@ -85,9 +85,9 @@
         </div>
 
         <!-- Khu hiển thị chat -->
-        <div class="chat-display" id="chatDisplay"
-             class="px-4 sm:px-6 py-4"
-             style="max-height: 60vh; overflow-y: auto;">
+       <div id="chatDisplay"
+           class="chat-display px-4 sm:px-6 py-4"
+           style="max-height: 60vh; overflow-y: auto;">
           <!-- Giữ nguyên để script genMessage() chèn vào -->
         </div>
 
@@ -100,8 +100,9 @@
               name="message"
               rows="3"
               placeholder="Nhập tin nhắn và nhấn Enter để gửi..."
-              class="flex-1 resize-none rounded-xl border-slate-300 px-3 py-2 text-sm leading-relaxed focus:border-indigo-500 focus:ring-indigo-500"
-            ></textarea>
+              class="flex-1 w-full min-h-[2.75rem] max-h-60 resize-none rounded-xl border-slate-300 px-3 py-2 text-sm leading-relaxed focus:border-indigo-500 focus:ring-indigo-500"
+            />
+            </textarea>
 
             <button
               type="button"
@@ -122,6 +123,7 @@
     <!-- Search script của bạn -->
     <script defer src="./js/search.js"></script>
 
+    <!-- (Tuỳ chọn) Tối ưu UX: auto-resize textarea + Enter để gửi -->
     <!-- (Tuỳ chọn) Tối ưu UX: auto-resize textarea + Enter để gửi -->
     <script>
       (function () {
@@ -154,4 +156,22 @@
 
             const avatar = el.querySelector('.user-avatar');
             if (avatar) {
-              avatar.classList.add('h-10','w-10','rounded-lg','object-c
+              avatar.classList.add('h-10','w-10','rounded-lg','object-cover','ring-1','ring-slate-200','bg-slate-100');
+            }
+
+            const user = el.querySelector('.user-name');
+            if (user) {
+              user.classList.add('block','text-sm','font-semibold','text-slate-700');
+            }
+
+            const content = el.querySelector('.content');
+            if (content) {
+              content.classList.add('mt-0.5','text-sm','leading-relaxed','text-slate-700','whitespace-pre-wrap','break-words');
+            }
+          }
+        });
+      });
+      observer.observe(document.getElementById('chatDisplay'), { childList: true, subtree: true });
+    </script>
+  </body>
+</html>
