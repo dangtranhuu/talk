@@ -21,121 +21,103 @@
     </style>
   </head>
 
-  <body class="bg-slate-50 text-slate-800 flex flex-col h-full">
-    <!-- Khung chính chiếm toàn màn -->
-    <div class="flex flex-col flex-1 bg-white shadow-xl ring-1 ring-black/5">
-
-      <!-- Header -->
-      <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-        <div class="flex items-center gap-3">
-          <div class="h-9 w-9 rounded-lg bg-indigo-600/10 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5m7 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+    <body class="min-h-screen bg-slate-50 text-slate-800" style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;">
+    <!-- Wrapper full màn hình -->
+    <div class="p-0 sm:p-0">
+      <!-- Khung ngoài full height: dùng flex-col + h-screen -->
+      <div class="flex h-screen flex-col rounded-none bg-white shadow-xl ring-1 ring-black/5">
+  
+        <!-- Header (giữ nguyên nội dung) -->
+        <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3 sm:px-6">
+          <div class="flex items-center gap-3">
+            <div class="h-9 w-9 shrink-0 rounded-lg bg-indigo-600/10 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5m7 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-base font-semibold leading-tight">Chat Interface</h1>
+              <p class="text-xs text-slate-500">Giao diện gọn gàng, dễ nhìn (TailwindCSS)</p>
+            </div>
           </div>
-          <div>
-            <h1 class="text-base font-semibold leading-tight">Chat Interface</h1>
-            <p class="text-xs text-slate-500">Chế độ toàn màn hình (TailwindCSS)</p>
+  
+          <div class="select-container">
+            <label for="channel" class="sr-only">Chọn kênh</label>
+            <select
+              id="channel"
+              name="channel"
+              class="rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+              <option value="anyone">Anyone</option>
+            </select>
           </div>
         </div>
-
-        <select
-          id="channel"
-          class="rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-        >
-          <option value="anyone">Anyone</option>
-        </select>
-      </div>
-
-      <!-- Thanh tìm kiếm -->
-      <div class="px-6 py-3 border-b border-slate-200">
-        <label for="search" class="block text-sm font-medium text-slate-700"
-          >Tìm kiếm:</label
-        >
-        <div class="mt-1 relative">
-          <input
-            type="text"
-            id="search"
-            class="w-full rounded-xl border-slate-300 pl-10 pr-4 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-            placeholder="Nhập từ khoá để lọc tin nhắn..."
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M12.9 14.32a8 8 0 111.414-1.414l3.387 3.387a1 1 0 01-1.414 1.414l-3.387-3.387zM14 8a6 6 0 11-12 0 6 6 0 0112 0z"
-              clip-rule="evenodd"
+  
+        <!-- Thanh tìm kiếm -->
+        <div class="px-4 py-3 sm:px-6 border-b border-slate-200">
+          <label for="search" class="block text-sm font-medium text-slate-700">
+            Tìm kiếm: <span id="result-search" class="text-slate-400"></span>
+          </label>
+          <div class="mt-1 relative">
+            <input
+              type="text"
+              id="search"
+              class="w-full rounded-xl border-slate-300 pl-10 pr-4 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+              placeholder="Nhập từ khoá để lọc tin nhắn..."
             />
-          </svg>
-        </div>
-      </div>
-
-      <!-- Vùng chat hiển thị -->
-      <div id="chatDisplay"
-        class="flex-1 px-6 py-4 overflow-y-auto bg-slate-50"
-        style="scroll-behavior: smooth;"
-      ></div>
-
-      <!-- Khu nhập tin -->
-      <div class="border-t border-slate-200 px-6 py-4">
-        <label for="message" class="block text-sm font-medium text-slate-700 mb-1">Nội dung chat:</label>
-        <div class="flex items-end gap-2">
-          <textarea
-            id="message"
-            rows="3"
-            placeholder="Nhập tin nhắn và nhấn Enter để gửi..."
-            class="flex-1 resize-none rounded-xl border-slate-300 px-3 py-2 text-sm leading-relaxed focus:border-indigo-500 focus:ring-indigo-500"
-          ></textarea>
-          <button
-            id="to-chat"
-            onclick="sendMessage()"
-            class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 -ml-1" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M3.4 20.4l17.7-7.6a1 1 0 000-1.8L3.4 3.4a1 1 0 00-1.4 1.1l1.5 6a1 1 0 00.8.8l7.1 1.7-7.1 1.7a1 1 0 00-.8.8l-1.5 6a1 1 0 001.4 1.1z"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l3.387 3.387a1 1 0 01-1.414 1.414l-3.387-3.387zM14 8a6 6 0 11-12 0 6 6 0 0112 0z" clip-rule="evenodd"/>
             </svg>
-            Gửi
-          </button>
+          </div>
+        </div>
+  
+        <!-- Khu hiển thị chat: GIỮ class 'chat-display' + id 'chatDisplay' -->
+        <div
+          id="chatDisplay"
+          class="chat-display flex-1 px-4 sm:px-6 py-4 overflow-y-auto"
+          style="scroll-behavior: smooth;"
+        >
+          <!-- genMessage() sẽ chèn vào đây -->
+        </div>
+  
+        <!-- Composer -->
+        <div class="border-t border-slate-200 px-4 py-3 sm:px-6">
+          <label for="message" class="block text-sm font-medium text-slate-700 mb-1">Nội dung chat:</label>
+          <div class="items-end gap-2">
+            <textarea
+              id="message"
+              name="message"
+              rows="3"
+              placeholder="Nhập tin nhắn và nhấn Enter để gửi..."
+              class="flex-1 w-full min-h-[2.75rem] max-h-60 resize-none rounded-xl border-slate-300 px-3 py-2 text-sm leading-relaxed focus:border-indigo-500 focus:ring-indigo-500"
+            ></textarea>
+  
+            <button
+              type="button"
+              id="to-chat"
+              onclick="sendMessage()"
+              class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 -ml-1" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3.4 20.4l17.7-7.6a1 1 0 000-1.8L3.4 3.4a1 1 0 00-1.4 1.1l1.5 6a1 1 0 00.8.8l7.1 1.7-7.1 1.7a1 1 0 00-.8.8l-1.5 6a1 1 0 001.4 1.1z"/>
+              </svg>
+              Gửi
+            </button>
+          </div>
         </div>
       </div>
     </div>
-
-    <script>
-      // Auto resize textarea
-      const ta = document.getElementById('message');
-      ta.addEventListener('input', () => {
-        ta.style.height = 'auto';
-        ta.style.height = Math.min(240, ta.scrollHeight) + 'px';
-      });
-
-      ta.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          document.getElementById('to-chat').click();
-        }
-      });
-
-      function sendMessage() {
-        const msg = ta.value.trim();
-        if (!msg) return;
-        const display = document.getElementById('chatDisplay');
-        const el = document.createElement('div');
-        el.className = 'message flex gap-3 py-2';
-        el.innerHTML = `
-          <img src="https://i.pravatar.cc/40" class="user-avatar h-10 w-10 rounded-lg ring-1 ring-slate-200" />
-          <div>
-            <div class="user-name font-semibold text-slate-700">Bạn</div>
-            <div class="content text-slate-700 whitespace-pre-wrap">${msg}</div>
-          </div>
-        `;
-        display.appendChild(el);
-        ta.value = '';
-        display.scrollTop = display.scrollHeight;
-      }
-    </script>
+  
+    <!-- Giữ nguyên các script cũ -->
+    <script defer src="./js/chat.js"></script>
+    <script defer src="./js/search.js"></script>
+  
+    <!-- Giữ nguyên đoạn auto-resize + observer của bạn nếu có -->
   </body>
+
 </html>
